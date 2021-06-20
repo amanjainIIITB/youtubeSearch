@@ -1,9 +1,11 @@
-# Dockerfile, Image, Container
-# Dockerfile is a blueprint for the image
-# Image is a template to run the container
-# Container is the actual running process where we have package project
+FROM python:3.8-slim-buster
 
-From python:3.8.6
+WORKDIR /app
+
+COPY requirements.txt requirements.txt
+
+RUN pip3 install -r requirements.txt
+
 COPY . .
-RUN pip install -r requirements.txt
-CMD ["python", "manage.py", "runserver"]
+
+CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
