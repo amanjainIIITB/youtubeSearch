@@ -1,13 +1,10 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
+from rest_framework.generics import ListAPIView
 
-from apiclient.discovery import build
-import youtubeSearch.settings
+from .serializer import ContentDetailsSerializer
+from .models import ContentDetails
 
 # Create your views here.
-class VideoSearch(APIView):
-    def get(self, request):
-        youtube_resource = build('youtube', 'v3', developerKey=youtubeSearch.settings.YOUTUBE_API_KEY)
-        request = youtube_resource.search().list(q='', part='snippet', type='video')
-        response = request.execute()
-        return Response(response)
+class VideoList(ListAPIView):
+    queryset = ContentDetails.objects.all().order_by('-publishedAt')
+    serializer_class = ContentDetailsSerializer
+    filterset_fields = ['title', 'description']
